@@ -12,9 +12,9 @@ We aim to develop a robust solution employing a Convolutional Neural Network (CN
 ### System Components
 * Web User Interface (UI):
 
-- Allows users to effortlessly upload images.
-- Facilitates the retrieval of predicted image classes.
-- Python Flask API:
+    Allows users to effortlessly upload images.
+    Facilitates the retrieval of predicted image classes.
+    Python Flask API:
 
 Serves as the backend for the CNN implementation.
 Receives uploaded images, preprocesses them (e.g., resize, normalize), and interfaces with the CNN.
