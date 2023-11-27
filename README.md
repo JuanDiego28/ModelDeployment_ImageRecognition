@@ -1,17 +1,30 @@
-# Sprint project 03
-> Flask ML API
+#  Image Classification Model deployment, Flask ML API
 
 ## The Business problem
 
 Imagine that you work for a company that has a large collection of images and needs to automatically classify them into different categories. This task can be time-consuming and error-prone when done manually by human workers.
 
-Your task is to develop a solution that can automatically classify images into over 1000 different categories using a Convolutional Neural Network (CNN) implemented in Tensorflow. Your solution will consist of a Web UI and a Python Flask API that serves the CNN.
+## Project Overview
 
-The Web UI should allow users to upload an image and receive the predicted class for that image.
+### Objective:
+We aim to develop a robust solution employing a Convolutional Neural Network (CNN) implemented in Tensorflow. This sophisticated approach enables us to automate the image classification process, achieving high accuracy and efficiency.
 
-The Python Flask API should receive the uploaded image, preprocess it (e.g. resize, normalize), feed it into the CNN, and return the predicted class as a JSON object. The API should handle errors gracefully and provide informative error messages to the UI if something goes wrong.
+### System Components
+* Web User Interface (UI):
 
-You shouldn't worry for now about the TensorFlow CNN because we will use a pre-trained model for this problem. We provide you with a Jupyter notebook [here](https://drive.google.com/file/d/1ADuBSE4z2ZVIdn66YDSwxKv-58U7WEOn/view?usp=sharing) which shows how to load and run this model and hope will serve as a motivation for you to learn in-depth how these amazing models work during the next sprint!
+- Allows users to effortlessly upload images.
+- Facilitates the retrieval of predicted image classes.
+- Python Flask API:
+
+Serves as the backend for the CNN implementation.
+Receives uploaded images, preprocesses them (e.g., resize, normalize), and interfaces with the CNN.
+Returns the predicted class in JSON format.
+Handles errors gracefully, providing informative messages to the UI in case of any issues.
+Implementation Details
+TensorFlow CNN:
+While we won't delve into the intricacies of building a TensorFlow CNN from scratch, we assure you that we have a robust solution in place. We'll leverage a pre-trained model for this project to streamline the process.
+For a detailed understanding of the model and its functionality, we provide a Jupyter notebook here. This resource serves as a guide to loading and running the model and serves as motivation for delving deeper into the workings of these remarkable models during our upcoming sprint.
+
 
 ## Technical aspects
 
