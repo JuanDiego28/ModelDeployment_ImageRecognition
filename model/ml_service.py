@@ -10,15 +10,11 @@ from tensorflow.keras.applications.resnet50 import decode_predictions, preproces
 from tensorflow.keras.preprocessing import image
 
 
-# TODO
 # Connect to Redis and assign to variable `db``
-# Make use of settings.py module to get Redis settings like host, port, etc.
+# Bring Redis settings like host, port, db. from settings.py module 
 db = redis.Redis(host = settings.REDIS_IP, port = settings.REDIS_PORT, db= settings.REDIS_DB_ID, decode_responses= True)
-# db.ping()
-# TODO
-# Load your ML model and assign to variable `model`
-# See https://drive.google.com/file/d/1ADuBSE4z2ZVIdn66YDSwxKv-58U7WEOn/view?usp=sharing
-# for more information about how to use this model.
+
+# Load ML model and assign to variable `model`
 model = ResNet50(include_top=True, weights="imagenet")
 
 def predict(image_name):
@@ -41,8 +37,6 @@ def predict(image_name):
     pred_probability = None
 
     # load image
-    # path = settings.UPLOAD_FOLDER
-
     img_path = os.path.join(settings.UPLOAD_FOLDER,image_name)
     img = image.load_img(img_path, target_size=(224, 224))
 
@@ -51,15 +45,13 @@ def predict(image_name):
     x_batch = np.expand_dims(x,axis= 0)
     x_batch = preprocess_input(x_batch)
 
+    # make the prediction
     result = model.predict(x_batch)
     prediction = decode_predictions(result, top= 1)
 
     class_name = prediction[0][0][1]
     pred_probability = prediction[0][0][2]
     pred_probability = round(pred_probability,4)
-
-    # TODO
-    # raise NotImplementedError
 
     return class_name, pred_probability
 
@@ -76,40 +68,24 @@ def classify_process():
     received, then, run our ML model to get predictions.
     """
     while True:
-        # Inside this loop you should add the code to:
-        #   1. Take a new job from Redis
+        # Take a new job from Redis
         _, msg = db.brpop(str(settings.REDIS_QUEUE))
-        print('antes de json:', msg)
-        # msg = json.loads(msg.decode('uft8')) #pasa a diccionario
-        msg = json.loads(msg) #pasa a diccionario
-        print('después msg:', msg)
-        # job_id = msg.get('id')
-        # image_name = msg.get('image_name')
-        # print('ml_service', image_name)
+        
+        #convert msg to dictionary
+        msg = json.loads(msg) 
 
-        print('1. ml_service, ready to make the prediction')
-        #   2. Run your ML model on the given data
+        # Run your ML model on the given data
         class_name, pred_probability = predict(msg['image_name'])
         
-        #   3. Store model prediction in a dict with the following shape:
-        #      {
-        #         "prediction": str,
-        #         "score": float,
-        #      }        
+        # Store model prediction in a dictionary:
+
         results = {
             "prediction": class_name,
             "score": float(pred_probability)
         }        
-        #   4. Store the results on Redis using the original job ID as the key
-        #      so the API can match the results it gets to the original job
-        #      sent
+        # Store the results on Redis using the original job ID as the key
+        #      so the API can match the results it gets to the original job sent
         db.set(msg['id'],json.dumps(results)) #json 
-        print('despues del dumps: ', json.dumps(results))
-
-        # Hint: You should be able to successfully implement the communication
-        #       code with Redis making use of functions `brpop()` and `set()`.
-        # TODO
-        # raise NotImplementedError
 
         # Sleep for a bit
         time.sleep(settings.SERVER_SLEEP)

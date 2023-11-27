@@ -6,9 +6,8 @@ import redis
 # import settings
 import settings
 
-# TODO
 # Connect to Redis and assign to variable `db``
-# Make use of settings.py module to get Redis settings like host, port, etc.
+# Bring Redis settings: host, port, db. from settings.py module
 db = redis.Redis(host = settings.REDIS_IP, port = settings.REDIS_PORT, db= settings.REDIS_DB_ID, decode_responses= True)
 
 
@@ -30,42 +29,30 @@ def model_predict(image_name):
     """
     prediction = None
     score = None
-    print('1. middleware, predicting image')
+    
     # Assign an unique ID for this job and add it to the queue.
-    # We need to assing this ID because we must be able to keep track
-    # of this particular job across all the services
-    # TODO
+    # to keep track of this particular job across all the services
     job_id = str(uuid4())
 
-    # Create a dict with the job data we will send through Redis having the
-    # following shape:
-    # {
-    #    "id": str,
-    #    "image_name": str,
-    # }
-    # TODO
+    # Create a dict with the job data we will send through Redis 
     job_data = {
         "id": job_id,
         "image_name": image_name
     }
-    print('1. middleware, job_id:', job_id, 'imagename: ', image_name)
+    
     # Send the job to the model service using Redis
-    # Hint: Using Redis `lpush()` function should be enough to accomplish this.
-    # TODO
     db.lpush(settings.REDIS_QUEUE,json.dumps(job_data))
     
+    #tracking if redis connection is ok
     try: print("db.ping = ", db.ping())
     except Exception: print('error with redis')
 
     # Loop until we received the response from our ML model
     while True:
         # Attempt to get model predictions using job_id
-        # Hint: Investigate how can we get a value using a key from Redis
-        # TODO
         output = db.get(job_id)
-        print('middleware_output', output)
+
         # Check if the text was correctly processed by our ML model
-        # Don't modify the code below, it should work as expected
         if output is not None:
             # output = json.loads(output.decode("utf-8"))
             output = json.loads(output)

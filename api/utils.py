@@ -18,17 +18,13 @@ def allowed_file(filename):
     bool
         True if the file is an image, False otherwise.
     """
-    
+    # allow just some extensions
     allowed_extensions = {"png", "jpg", "jpeg", "gif"}
-    # TODO
+
     if '.' not in filename or filename == "" or len(filename.split('/')[-1].split('.'))>2:
         return False
     elif filename.split(".")[-1].lower() in allowed_extensions:
         return True
-
-    # raise NotImplementedError
-
-print(allowed_file("../../car.PNG"))
 
 def get_file_hash(file):
     """
