@@ -62,7 +62,7 @@ def model_predict(image_name):
             db.delete(job_id)
             break
 
-        # Sleep some time waiting for model results
+        # Sleep some time waiting for model results 
         time.sleep(settings.API_SLEEP)
 
     return prediction, score
